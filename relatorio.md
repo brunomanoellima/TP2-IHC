@@ -27,7 +27,7 @@ As rotulações da classe-alvo foram geradas de forma determinística com base e
 
 - **Alta:** número de erros ≤ 2, tempo_tarefa_seg ≤ 60, satisfacao ≥ 4, eficiencia ≥ 0,60, e navegacao_intuitiva ≥ 4;  
 - **Média:** condições intermediárias, onde pelo menos 3 dos critérios de "alta" são atendidos parcialmente ou exatamente, mas sem atingir todos os thresholds de "alta" e sem cair nos critérios de "baixa";  
-- **Baixa:** erros > 5, tempo_tarefa_seg > 120, satisfacao ≤ 2, eficiencia < 0,40, ou combinacoes que violem múltiplos thresholds críticos.
+- **Baixa:** erros > 5, tempo_tarefa_seg > 120, satisfacao ≤ 2, eficiencia < 0,40, ou combinações que violem múltiplos thresholds críticos.
 
 Essas regras garantem que a base reflita relações causais teoricamente fundamentadas, permitindo que os modelos de ML "redescubram" padrões alinhados à teoria de usabilidade.
 
@@ -49,11 +49,14 @@ A base foi inspecionada no Weka para confirmar ausência de valores ausentes, du
 
 A análise exploratória foi conduzida na aba **Visualize** do Weka, utilizando diagramas de dispersão (scatter plots) e boxplots para cada par atributo-classe. Os padrões observados foram claros e consistentes com as regras de geração:
 
-- **Experiência prévia × Usabilidade:** usuários com `experiencia_previa = alta` apresentaram predominância absoluta da classe `alta` (acima de 90% dos pontos); `baixa` experiência correlacionou-se fortemente com `baixa` usabilidade.  
-- **Erros × Usabilidade:** aumento linear no número de erros desloca os pontos da classe `alta` para `baixa`, com threshold visível em torno de 3-4 erros como ponto de inflexão.  
-- **Eficiência × Usabilidade:** valores de `eficiencia ≥ 0,60` concentram-se exclusivamente na classe `alta`; valores abaixo de 0,40 dominam a classe `baixa`.  
-- **Tempo × Usabilidade:** tempos acima de 120 segundos associam-se quase que exclusivamente à classe `baixa`; tempos abaixo de 60 segundos predominam em `alta`.  
-- **Satisfação × Usabilidade:** escala de satisfação apresenta separação nítida, com notas ≥ 4 fortemente ligadas a `alta` usabilidade e ≤ 2 a `baixa`.
+- **`experiencia_previa` × `nivel_usabilidade`** (`Experiencia x classe.png`): usuários com `experiencia_previa = alta` apresentaram predominância absoluta da classe `alta` (acima de 90% dos pontos); `baixa` experiência correlacionou-se fortemente com `baixa` usabilidade.  
+- **`erros` × `nivel_usabilidade`** (`Erro x classe.png`): aumento linear no número de erros desloca os pontos da classe `alta` para `baixa`, com threshold visível em torno de 3-4 erros como ponto de inflexão.  
+- **`eficiencia` × `nivel_usabilidade`** (`Eficiencia x classe.png`): valores de `eficiencia ≥ 0,60` concentram-se exclusivamente na classe `alta`; valores abaixo de 0,40 dominam a classe `baixa`.  
+- **`tempo_tarefa_seg` × `nivel_usabilidade`** (`Tempo x classe.png`): tempos acima de 120 segundos associam-se quase que Cruelmente à classe `baixa`; tempos abaixo de 60 segundos predominam em `alta`.  
+- **`satisfacao` × `nivel_usabilidade`** (`Satisfacao x classe.png`): escala de satisfação apresenta separação nítida, com notas ≥ 4 fortemente ligadas a `alta` usabilidade e ≤ 2 a `baixa`.  
+- **`navegacao_intuitiva` × `nivel_usabilidade`** (`Navegacao x classe.png`): valores altos de intuitividade (≥ 4) correlacionam-se com usabilidade `alta`, enquanto valores baixos (≤ 2) indicam usabilidade `baixa`.  
+- **`erros` × `tempo_tarefa_seg`** (`Erro x Tempo.png`): correlação positiva clara — mais erros acompanham tempos mais longos, com clusters bem definidos por classe.  
+- **Matriz de dispersão geral** (`Plot Matrix.png`): reforça todas as correlações acima, destacando separabilidade entre classes.
 
 Essas visualizações confirmam a alta coerência interna da base sintética, sem sobreposições significativas entre classes em dimensões críticas, o que facilita a tarefa de classificação.
 
@@ -99,6 +102,8 @@ a   b   c   ← classificado como
  0  10  89  | c = alta
 
 
+
+
 **Interpretação detalhada:**  
 - **Diagonal principal:** 108 (baixa), 77 (média), 89 (alta) → total de 274 acertos em 300 instâncias = **91,33 %**.  
 - **Erros principais:**  
@@ -117,7 +122,8 @@ A árvore gerada pelo J48 possui profundidade moderada e inicia a divisão pela 
 Exemplo de caminho típico para `alta` usabilidade:  
 `experiencia_previa = alta` → `navegacao_intuitiva >= 4` → `satisfacao >= 4` → `erros <= 2` → classe = **alta**.
 
-A árvore "redescobriu" as regras de geração com fidelidade quase perfeita, confirmando a consistência entre teoria, dados e modelo aprendido.
+A árvore "redescobriu" as regras de geração com fidelidade quase perfeita, confirmando a consistência entre teoria, dados e modelo aprendido.  
+*(Ver `Arvore.png` para a exportação gráfica completa da árvore de decisão.)*
 
 ---
 
@@ -155,15 +161,24 @@ A árvore "redescobriu" as regras de geração com fidelidade quase perfeita, co
 
 - `usabilidade_site_educacional.arff` → arquivo de dados no formato Weka;  
 - `relatorio.md` → este documento em Markdown;  
+- `README.md` → instruções de uso e organização do projeto;  
 - Pasta `prints/` contendo:  
-  - Capturas de tela do Weka Explorer:  
-    - `visualizacao_eficiencia_classe.png`  
-    - `visualizacao_erros_classe.png`  
-    - `visualizacao_tempo_classe.png`  
-    - `visualizacao_experiencia_classe.png`  
-    - `visualizacao_satisfacao_classe.png`  
-  - `J48_tree.png` → exportação gráfica da árvore de decisão;  
-  - `resultados_classificadores.txt` → sumários completos (acurácia, kappa, matriz de confusão) de todos os algoritmos;  
-  - `matriz_confusao_J48.png` → matriz de confusão visual do melhor modelo.
+  - **Visualizações de atributos × classe:**  
+    - `Eficiencia x classe.png`  
+    - `Erro x classe.png`  
+    - `Erro x Tempo.png`  
+    - `Experiencia x classe.png`  
+    - `Navegacao x classe.png`  
+    - `Satisfacao x classe.png`  
+    - `Tempo x classe.png`  
+    - `Plot Matrix.png`  
+  - **Árvore de decisão:**  
+    - `Arvore.png`  
+  - **Sumários e matrizes de confusão dos classificadores:**  
+    - `Naive Bayes.jpg`  
+    - `ibk.jpg`  
+    - `j48.jpg`  
+    - `oner.jpg`  
+    - `zeror.jpg`  
 
 ---
