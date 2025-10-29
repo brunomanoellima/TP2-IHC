@@ -167,5 +167,3 @@ A árvore "redescobriu" as regras de geração com fidelidade quase perfeita, co
   - `matriz_confusao_J48.png` → matriz de confusão visual do melhor modelo.
 
 ---
-
-*(Relatório expandido conforme estrutura oficial do TP2 — IHC e Machine Learning com Weka. Todos os dados, métricas e interpretações são fiéis ao conteúdo original, sem adição de informações inventadas.)*
