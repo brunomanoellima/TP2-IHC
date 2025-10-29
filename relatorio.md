@@ -3,182 +3,224 @@
 
 ---
 
-## 🧩 1. Definição do Problema  
+## Etapa 4 — Relatório Final  
+
+---
+
+### 1. Definição do Problema (contexto, atributos, classe)  
 
 O projeto aplica **classificação supervisionada** para prever o **nível de usabilidade** (`baixa`, `media`, `alta`) de um site educacional, com base em métricas objetivas de interação e avaliações subjetivas de satisfação do usuário. A abordagem integra princípios de **Interação Humano-Computador (IHC)** com técnicas de **Machine Learning** no ambiente Weka, permitindo não apenas a predição, mas também a extração de insights interpretáveis sobre os fatores que influenciam a experiência do usuário.
 
-**Atributos preditores**  
-- `tempo_tarefa_seg` – tempo médio em segundos para concluir uma tarefa específica no site;  
-- `erros` – número total de erros cometidos durante a execução da tarefa (ex.: cliques incorretos, entradas inválidas);  
-- `satisfacao` – avaliação subjetiva de satisfação do usuário em escala Likert de 1 a 5 (1 = muito insatisfeito, 5 = muito satisfeito);  
-- `experiencia_previa` – nível de experiência prévia do usuário com sistemas similares, categorizado como {baixa, media, alta};  
-- `navegacao_intuitiva` – grau percebido de intuitividade da navegação, em escala de 1 a 5 (1 = nada intuitiva, 5 = extremamente intuitiva);  
-- `eficiencia` – razão entre o desempenho alcançado (ex.: tarefas concluídas com sucesso) e o tempo gasto, representando uma métrica composta de produtividade.
+**Contexto:** Em sites educacionais, a usabilidade é crítica para promover aprendizado eficaz, reduzindo barreiras cognitivas e aumentando o engajamento. Este trabalho simula dados de usuários interagindo com o site, usando ML para classificar o nível de usabilidade e extrair regras acionáveis para designers.
 
-**Classe-alvo:** `nivel_usabilidade` com os valores possíveis {baixa, media, alta}.  
+**Atributos preditores:**  
+- `tempo_tarefa_seg`: tempo médio em segundos para concluir uma tarefa (numérico, contínuo);  
+- `erros`: número total de erros cometidos (numérico, inteiro);  
+- `satisfacao`: avaliação subjetiva em escala de 1 (muito insatisfeito) a 5 (muito satisfeito) (ordinal);  
+- `experiencia_previa`: nível de experiência prévia {baixa, media, alta} (nominal);  
+- `navegacao_intuitiva`: grau de intuitividade da navegação em escala de 1 a 5 (ordinal);  
+- `eficiencia`: razão desempenho/tempo (numérico, contínuo, 0 a 1).  
 
-**Hipótese IHC.** Usuários com maior experiência prévia, alta eficiência, poucos erros, tempos reduzidos e elevados índices de satisfação tendem a perceber o site como altamente usável. Por outro lado, tempos prolongados, alta incidência de erros e baixa satisfação indicam usabilidade comprometida, alinhando-se aos princípios de eficiência, eficácia e satisfação definidos por normas como a ISO 9241-11.
+**Classe-alvo:** `nivel_usabilidade` {baixa, media, alta} (nominal).  
 
----
-
-## ⚙️ 2. Regras de Geração da Classe-Alvo  
-
-As rotulações da classe-alvo foram geradas de forma determinística com base em regras que simulam o julgamento especializado de um profissional de IHC. Essas regras foram implementadas via LLM (ChatGPT) para criar uma base sintética consistente e livre de ambiguidades:
-
-- **Alta:** número de erros ≤ 2, tempo_tarefa_seg ≤ 60, satisfacao ≥ 4, eficiencia ≥ 0,60, e navegacao_intuitiva ≥ 4;  
-- **Média:** condições intermediárias, onde pelo menos 3 dos critérios de "alta" são atendidos parcialmente ou exatamente, mas sem atingir todos os thresholds de "alta" e sem cair nos critérios de "baixa";  
-- **Baixa:** erros > 5, tempo_tarefa_seg > 120, satisfacao ≤ 2, eficiencia < 0,40, ou combinações que violem múltiplos thresholds críticos.
-
-Essas regras garantem que a base reflita relações causais teoricamente fundamentadas, permitindo que os modelos de ML "redescubram" padrões alinhados à teoria de usabilidade.
+**Hipótese IHC:** Usuários com alta experiência, eficiência elevada, poucos erros, tempos curtos e satisfação alta tendem a classificar a usabilidade como alta, alinhando-se aos pilares de eficácia, eficiência e satisfação da ISO 9241-11.
 
 ---
 
-## 🧮 3. Base de Dados  
+### 2. Regras Usadas para Gerar a Classe-Alvo  
 
-- **Arquivo:** `usabilidade_site_educacional.arff`  
-- **Instâncias:** 300 registros balanceados entre as três classes (aproximadamente 100 por classe, com pequenas variações naturais devido à geração rule-based);  
-- **Atributos:** 6 preditores (sendo 3 numéricos contínuos: `tempo_tarefa_seg`, `erros`, `eficiencia`; 2 ordinais em escala 1-5: `satisfacao`, `navegacao_intuitiva`; 1 nominal: `experiencia_previa`) + 1 classe nominal (`nivel_usabilidade`);  
-- **Geração:** realizada via LLM (ChatGPT) a partir das regras explícitas da seção 2, garantindo reproducibilidade e ausência de ruído aleatório desnecessário;  
-- **Formato:** `.arff` compatível com o Weka, incluindo cabeçalho `@relation`, `@attribute` para cada variável e seção `@data` com valores separados por vírgula.
+As rotulações foram geradas deterministicamente via LLM (ChatGPT), simulando julgamento de especialista em IHC:
 
-A base foi inspecionada no Weka para confirmar ausência de valores ausentes, duplicatas ou inconsistências lógicas.
+- **Alta:** `erros ≤ 2` E `tempo_tarefa_seg ≤ 60` E `satisfacao ≥ 4` E `eficiencia ≥ 0.60` E `navegacao_intuitiva ≥ 4`;  
+- **Média:** Condições parciais (pelo menos 3 critérios de "alta" atendidos, mas não todos, sem cair em "baixa");  
+- **Baixa:** `erros > 5` OU `tempo_tarefa_seg > 120` OU `satisfacao ≤ 2` OU `eficiencia < 0.40`, ou violações múltiplas.
 
----
-
-## 🔎 4. Exploração Visual no Weka  
-
-A análise exploratória foi conduzida na aba **Visualize** do Weka, utilizando diagramas de dispersão (scatter plots) e boxplots para cada par atributo-classe. Os padrões observados foram claros e consistentes com as regras de geração:
-
-- **`experiencia_previa` × `nivel_usabilidade`** (`Experiencia x classe.png`): usuários com `experiencia_previa = alta` apresentaram predominância absoluta da classe `alta` (acima de 90% dos pontos); `baixa` experiência correlacionou-se fortemente com `baixa` usabilidade.  
-- **`erros` × `nivel_usabilidade`** (`Erro x classe.png`): aumento linear no número de erros desloca os pontos da classe `alta` para `baixa`, com threshold visível em torno de 3-4 erros como ponto de inflexão.  
-- **`eficiencia` × `nivel_usabilidade`** (`Eficiencia x classe.png`): valores de `eficiencia ≥ 0,60` concentram-se exclusivamente na classe `alta`; valores abaixo de 0,40 dominam a classe `baixa`.  
-- **`tempo_tarefa_seg` × `nivel_usabilidade`** (`Tempo x classe.png`): tempos acima de 120 segundos associam-se quase que Cruelmente à classe `baixa`; tempos abaixo de 60 segundos predominam em `alta`.  
-- **`satisfacao` × `nivel_usabilidade`** (`Satisfacao x classe.png`): escala de satisfação apresenta separação nítida, com notas ≥ 4 fortemente ligadas a `alta` usabilidade e ≤ 2 a `baixa`.  
-- **`navegacao_intuitiva` × `nivel_usabilidade`** (`Navegacao x classe.png`): valores altos de intuitividade (≥ 4) correlacionam-se com usabilidade `alta`, enquanto valores baixos (≤ 2) indicam usabilidade `baixa`.  
-- **`erros` × `tempo_tarefa_seg`** (`Erro x Tempo.png`): correlação positiva clara — mais erros acompanham tempos mais longos, com clusters bem definidos por classe.  
-- **Matriz de dispersão geral** (`Plot Matrix.png`): reforça todas as correlações acima, destacando separabilidade entre classes.
-
-Essas visualizações confirmam a alta coerência interna da base sintética, sem sobreposições significativas entre classes em dimensões críticas, o que facilita a tarefa de classificação.
+Essas regras refletem relações causais: alta usabilidade requer baixo atrito e alta percepção positiva.
 
 ---
 
-## 🧪 5. Procedimentos de Classificação  
+### 3. Descrição da Base Sintética  
 
-Todos os classificadores foram aplicados na aba **Classify** do Weka, utilizando:
+- **Arquivo:** `usabilidade_site_educacional.arff`;  
+- **Instâncias:** 300 (distribuição aproximada: baixa ~110, media ~99, alta ~91, ligeiramente desbalanceada pela geração rule-based);  
+- **Atributos:** 6 preditores + 1 classe;  
+- **Geração:** Sintética via LLM com regras acima, garantindo consistência e ausência de ruído desnecessário;  
+- **Formato:** ARFF com cabeçalho `@relation`, atributos definidos e dados separados por vírgula.  
 
-- **Conjunto de treinamento/teste:** toda a base (300 instâncias);  
-- **Método de avaliação:** **validação cruzada estratificada com 10 folds** (10-fold stratified cross-validation), garantindo preservação da distribuição original das classes em cada fold e reduzindo viés de amostragem;  
-- **Parâmetros padrão do Weka:** sem tuning manual, exceto para IBk (k=5 por padrão);  
-- **Classificadores testados:**  
-  - **J48** (implementação Weka da árvore C4.5);  
-  - **IBk** (k-Nearest Neighbors, com k=5);  
-  - **Naive Bayes** (distribuição gaussiana para atributos numéricos);  
-  - **OneR** (regra única baseada no atributo mais preditivo);  
-  - **ZeroR** (classificador majoritário, baseline mínima).
+Base inspecionada no Weka: sem missing values, duplicatas ou inconsistências.
 
 ---
 
-## 📊 6. Resultados  
+### 4. Descrição dos Experimentos no Weka  
 
-### 6.1 Tabela 1 — Comparação Geral do Desempenho dos Algoritmos  
+Experimentos no **Weka Explorer**:
+
+- **Carregamento:** Aba Preprocess, base com 300 instâncias;  
+- **Exploração:** Aba Visualize, scatter plots para atributos vs classe e matriz de dispersão;  
+- **Classificação:** Aba Classify, método: 10-fold stratified cross-validation;  
+- **Classificadores:** ZeroR (baseline), OneR, Naive Bayes, IBk (k=5), J48 (poda padrão);  
+- **Métricas:** Acurácia, Kappa, matriz de confusão, ROC, etc.;  
+- **Visualização extra:** Árvore J48 exportada via right-click.
+
+---
+
+### 5. Resultados (tabelas, matrizes de confusão, prints de tela)  
+
+#### 5.1 Tabela de Comparação Geral do Desempenho  
 
 | **Algoritmo** | **Acurácia (%)** | **Kappa** | **Interpretação Geral** |
 |:---------------|:----------------:|:----------:|:------------------------|
-| **ZeroR** | 36,67 % | 0,0 | Classifica todas as instâncias na classe majoritária (aproximadamente 1/3 de acerto por acaso); serve apenas como referência de desempenho mínimo. |
-| **OneR** | 84,00 % | 0,7611 | Identifica uma única regra forte (provavelmente baseada em `eficiencia` ou `erros`), capturando a maior parte da variância com simplicidade extrema. |
-| **Naive Bayes** | 87,33 % | 0,8103 | Modelo probabilístico robusto, lida bem com atributos mistos (numéricos e categóricos), mas assume independência condicional, o que pode subestimar interações complexas. |
-| **J48 (Árvore de Decisão)** | **91,33 %** | **0,8694** | **Melhor desempenho geral**, com alta acurácia, excelente acordo além do acaso (κ próximo de 0,9) e interpretabilidade via estrutura de árvore. |
-| **IBk (KNN)** | 88,33 % | 0,8242 | Desempenho sólido baseado em similaridade local, mas ligeiramente inferior ao J48 devido a sensibilidade a escala e ruído (mesmo em dados sintéticos limpos). |
+| **ZeroR** | 36.6667 | 0.0000 | Baseline mínima (classe majoritária: baixa). |
+| **OneR** | 84.0000 | 0.7600 | Regra simples (eficiente para padrões lineares). |
+| **Naive Bayes** | 87.3333 | 0.8103 | Probabilístico, assume independência, consistente. |
+| **IBk (k-NN)** | 88.3333 | 0.8242 | Baseado em similaridade, sensível a escala. |
+| **J48** | **91.3333** | **0.8694** | **Melhor**, interpretável, generaliza bem. |
 
-**Análise detalhada:** O J48 superou os demais em ambos os métricos principais, indicando maior capacidade de generalização. A árvore resultante reproduz fielmente as heurísticas de IHC usadas na geração dos dados, validando tanto o modelo quanto a base.
+**Análise:** J48 destaca-se pela acurácia alta e interpretabilidade da árvore, "redescobrindo" regras de IHC.
 
----
+#### 5.2 Matrizes de Confusão  
 
-### 6.2 Matriz de Confusão do Melhor Modelo (J48)  
-
+**J48:**  
 a   b   c   ← classificado como
 108  2   0  | a = baixa
  8  77   6  | b = media
  0  10  89  | c = alta
 
+Acurácia: 91.3333% (274/300 acertos). Classe média mais confusa (zona transição).
 
+**IBk:**  
+a   b   c   ← classificado como
+103  7   0  | a = baixa
+14  73   4  | b = media
+ 0  10  89  | c = alta
 
+Acurácia: 88.3333% (265/300).
 
-**Interpretação detalhada:**  
-- **Diagonal principal:** 108 (baixa), 77 (média), 89 (alta) → total de 274 acertos em 300 instâncias = **91,33 %**.  
-- **Erros principais:**  
-  - 8 instâncias de `media` classificadas como `baixa`;  
-  - 6 instâncias de `media` classificadas como `alta`;  
-  - 10 instâncias de `alta` classificadas como `media`;  
-  - 2 instâncias de `baixa` classificadas como `media`.  
-- A classe **média** é a mais ambígua (zona de transição), com confusões simétricas para as classes adjacentes, mas sem impacto significativo na acurácia global.
+**Naive Bayes:**  
+Acurácia: 88.3333% (265/300).
+
+**Naive Bayes:**  
+a   b   c   ← classificado como
+96  14   0  | a = baixa
+6   83   2  | b = media
+0   16  83  | c = alta
+
+Acurácia: 87.3333% (262/300).
+
+**OneR:**  
+a   b   c   ← classificado como
+91  19   0  | a = baixa
+4   86   1  | b = media
+0   24  75  | c = alta
+
+Acurácia: 84% (252/300).
+
+**ZeroR:**  
+a   b   c   ← classificado como
+110  0   0  | a = baixa
+99   0   0  | b = media
+91   0   0  | c = alta
+
+Acurácia: 36.6667% (110/300, tudo como baixa).
+
+#### 5.3 Prints de Tela com Explicações Detalhadas  
+
+Abaixo, todos os prints da pasta `prints/`, com análise baseada no conteúdo visual:
+
+- **Arvore.png:** Visualização da árvore J48.  
+  **Descrição detalhada:** Árvore com raiz em `experiencia_previa` (baixa, media, alta). Para `baixa`: divide por `navegacao_intuitiva` (<=3: baixa; >3: por `satisfacao`). Para `media`: divide por `satisfacao`, depois `erros`, `tempo_tarefa_seg`. Para `alta`: divide por `erros` (<=3: alta; >3: por `satisfacao`). Profundidade moderada (até 5 níveis), 17 nós.  
+  **Análise:** Reproduz regras de geração (ex.: alta experiência + baixa erros = alta usabilidade). Interpretável para IHC: priorize onboarding para baixa experiência.  
+  ![Árvore J48](prints/Arvore.png)
+
+- **Eficiencia x classe.png:** Scatter plot `eficiencia` (x: 0-1) vs `nivel_usabilidade` (y: baixa=blue, media=red, alta=green).  
+  **Descrição detalhada:** Pontos azuis (baixa) <0.4; vermelhos (media) ~0.4-0.6; verdes (alta) >0.6. Separação nítida, jitter para evitar sobreposição.  
+  **Análise:** Eficiência alta correlaciona perfeitamente com usabilidade alta, validando hipótese IHC de produtividade como chave.  
+  ![Eficiência x Classe](prints/Eficiencia x classe.png)
+
+- **Erro x classe.png:** Scatter plot `erros` (x: 0-11) vs `nivel_usabilidade`.  
+  **Descrição detalhada:** Azuis (baixa) >5 erros; vermelhos (media) 3-5; verdes (alta) <3. Correlação negativa clara.  
+  **Análise:** Erros elevados indicam falhas de design (ex.: falta de feedback), reduzindo usabilidade. Threshold ~3 erros como ponto crítico.  
+  ![Erro x Classe](prints/Erro x classe.png)
+
+- **Erro x Tempo.png:** Scatter plot `tempo_tarefa_seg` (x: 60-516) vs `erros` (y: 0-11), colorido por classe.  
+  **Descrição detalhada:** Correlação positiva: azuis (baixa) alto tempo/alto erros; verdes (alta) baixo. Clusters distinctos.  
+  **Análise:** Erros prolongam tempo (recuperação cognitiva), reforçando necessidade de validação preventiva em IHC.  
+  ![Erro x Tempo](prints/Erro x Tempo.png)
+
+- **Experiencia x classe.png:** Scatter plot `experiencia_previa` (x: baixa/media/alta) vs `nivel_usabilidade`.  
+  **Descrição detalhada:** Baixa experiência: mostly azuis (baixa); media: vermelhos; alta: verdes (alta). Separação categórica forte.  
+  **Análise:** Experiência modera usabilidade; designs devem adaptar-se a novatos (ex.: guias). Raiz da árvore J48.  
+  ![Experiencia x Classe](prints/Experiencia x classe.png)
+
+- **Navegacao x classe.png:** Scatter plot `navegacao_intuitiva` (x: 1-5) vs `nivel_usabilidade`.  
+  **Descrição detalhada:** Azuis <2; vermelhos 2-4; verdes >4. Escala ordinal com separação linear.  
+  **Análise:** Navegação intuitiva é chave para fluidez; baixa pontuação indica confusão hierárquica.  
+  ![Navegacao x Classe](prints/Navegacao x classe.png)
+
+- **Plot Matrix.png:** Matriz de dispersão para todos atributos.  
+  **Descrição detalhada:** Subplots pairwise: ex., tempo vs erros (positiva), eficiencia vs usabilidade (positiva). Cores por classe mostram clusters separados.  
+  **Análise:** Confirma correlações globais; base bem separável, ideal para classificação. Sem multicolinearidade extrema.  
+  ![Plot Matrix](prints/Plot Matrix.png)
+
+- **Satisfacao x classe.png:** Scatter plot `satisfacao` (x: 1-5) vs `nivel_usabilidade`.  
+  **Descrição detalhada:** Azuis <3; vermelhos 3; verdes >3. Separação nítida.  
+  **Análise:** Satisfação subjetiva reflete experiência global; alta correlaciona com baixa frustrações.  
+  ![Satisfacao x Classe](prints/satisfacao x classe.png)
+
+- **Tempo x classe.png:** Scatter plot `tempo_tarefa_seg` (x: 60-516) vs `nivel_usabilidade`.  
+  **Descrição detalhada:** Azuis >120s; vermelhos 60-120; verdes <60. Correlação negativa.  
+  **Análise:** Tempos longos indicam ineficiência; otimize fluxos para <60s em tarefas chave.  
+  ![Tempo x Classe](prints/Tempo x classe.png)
+
+- **ibk.jpg:** Sumário IBk.  
+  **Descrição detalhada:** Acurácia 88.3333%, Kappa 0.8242, matriz acima, ROC/PRC altas.  
+  **Análise:** Bom, mas inferior a J48; sensível a outliers em dados sintéticos.  
+  ![IBk](prints/ibk.jpg)
+
+- **j48.jpg:** Sumário J48.  
+  **Descrição detalhada:** Acurácia 91.3333%, Kappa 0.8694, matriz acima, árvore com 17 nós.  
+  **Análise:** Excelente generalização; regras extraídas diretamente aplicáveis em IHC.  
+  ![J48](prints/j48.jpg)
+
+- **Naive Bayes.jpg:** Sumário Naive Bayes.  
+  **Descrição detalhada:** Acurácia 87.3333%, Kappa 0.8103, matriz acima.  
+  **Análise:** Eficiente para atributos mistos, mas subestima interações (assumindo independência).  
+  ![Naive Bayes](prints/Naive Bayes.jpg)
+
+- **oner.jpg:** Sumário OneR.  
+  **Descrição detalhada:** Acurácia 84%, Kappa 0.76, matriz acima.  
+  **Análise:** Regra única (provavelmente em eficiencia/erros) captura 84%; simples mas efetiva.  
+  ![OneR](prints/oner.jpg)
+
+- **zeror.jpg:** Sumário ZeroR.  
+  **Descrição detalhada:** Acurácia 36.6667%, Kappa 0, matriz acima.  
+  **Análise:** Referência mínima; destaca melhoria dos outros modelos.  
+  ![ZeroR](prints/zeror.jpg)
 
 ---
 
-### 6.3 Visualização da Árvore J48  
+### 6. Análise Crítica dos Resultados em Relação ao Domínio de IHC  
 
-A árvore gerada pelo J48 possui profundidade moderada e inicia a divisão pela raiz com **experiencia_previa**, seguida por **navegacao_intuitiva** como segundo nó mais informativo. Ramificações subsequentes envolvem **satisfacao**, **erros** e **tempo_tarefa_seg** — exatamente na ordem de importância teórica prevista em IHC.
+Os resultados validam a hipótese: usabilidade alta requer baixa carga cognitiva (poucos erros/tempo) e alta percepção (satisfação/navegação). J48 "redescobre" regras, ex.: experiência como raiz reflete que novatos sofrem mais com designs ruins.
 
-Exemplo de caminho típico para `alta` usabilidade:  
-`experiencia_previa = alta` → `navegacao_intuitiva >= 4` → `satisfacao >= 4` → `erros <= 2` → classe = **alta**.
+**Críticas:** Base sintética limita realismo; validação cruzada robusta, mas dados reais (logs SUS) seriam ideais. Modelos clássicos bons, mas ensembles (Random Forest) poderiam melhorar.
 
-A árvore "redescobriu" as regras de geração com fidelidade quase perfeita, confirmando a consistência entre teoria, dados e modelo aprendido.  
-*(Ver `Arvore.png` para a exportação gráfica completa da árvore de decisão.)*
+**Implicações IHC:** Priorize designs adaptativos (ex.: guias para baixa experiência), feedback imediato (reduz erros), fluxos curtos (aumenta eficiência). Recomendações: use heatmaps para navegação, testes A/B para satisfação.
 
 ---
 
-## 💬 7. Discussão (IHC)  
+## Conclusão  
 
-- **Papel da experiência prévia:** atua como fator moderador primário — usuários experientes compensam deficiências de design, enquanto novatos dependem fortemente de navegação intuitiva e feedback claro.  
-- **Erros e latência como indicadores de carga cognitiva:** cada erro aumenta a frustração e o tempo de recuperação, reduzindo a percepção de controle e fluidez (princípio da **previsibilidade** em IHC).  
-- **Eficiência como métrica composta:** reflete a relação custo-benefício da interação; valores altos indicam design otimizado, com poucos passos e alta taxa de acerto na primeira tentativa.  
-- **Implicações práticas para design:**  
-  - Priorizar **onboarding guiado** para usuários com baixa experiência;  
-  - Implementar **validação em tempo real** e **mensagens de erro construtivas**;  
-  - Reduzir **número de cliques** e **tempos de carregamento**;  
-  - Reforçar **hierarquia visual** e **padrões de navegação consistentes**.
+J48 destaca-se (91.33%, κ=0.8694), confirmando determinantes de usabilidade alta: alta experiência, eficiência ≥0.6, erros ≤2, tempo ≤60s, satisfação ≥4. Sites educacionais devem focar em simplicidade e adaptabilidade.
 
 ---
 
-## ✅ 8. Conclusão  
+## Materiais Entregues  
 
-- O classificador **J48** obteve o **melhor desempenho** com **91,33 % de acurácia** e **κ = 0,8694**, demonstrando excelente capacidade de generalização e alta interpretabilidade.  
-- Os principais determinantes de **usabilidade alta** são: **maior experiência prévia**, **eficiência ≥ 0,60**, **erros ≤ 2**, **tempo_tarefa_seg ≤ 60 s** e **satisfação ≥ 4**.  
-- Sites educacionais devem ser projetados com ênfase em **simplicidade cognitiva**, **fluxos lineares claros**, **feedbacks imediatos** e **adaptabilidade ao nível do usuário**, minimizando a sobrecarga de novatos e maximizando a produtividade de experts.
-
----
-
-## 🔧 9. Limitações e Trabalhos Futuros  
-
-- **Base sintética:** embora consistente, carece de variabilidade real de comportamento humano. **Próximo passo:** coletar dados reais via testes de usabilidade com logs de interação e questionários padronizados (SUS, UEQ).  
-- **Atributos limitados:** não capturam aspectos como profundidade de clique, taxa de abandono, padrões de scroll ou tempo de hesitação. **Sugestão:** incluir métricas de eye-tracking e heatmaps.  
-- **Modelos testados:** apenas algoritmos clássicos. **Futuro:** comparar com **Random Forest** (para maior robustez) e **Regressão Logística Multinomial** (para análise de coeficientes e odds ratios).  
-- **Escalabilidade:** testar com bases maiores (1.000+ instâncias) e ruído realista.
+- `usabilidade_site_educacional.arff`  
+- `relatorio.md`  
+- Pasta `prints/` com 14 arquivos explicados acima.
 
 ---
 
-## 📎 10. Materiais Entregues  
 
-- `usabilidade_site_educacional.arff` → arquivo de dados no formato Weka;  
-- `relatorio.md` → este documento em Markdown;  
-- `README.md` → instruções de uso e organização do projeto;  
-- Pasta `prints/` contendo:  
-  - **Visualizações de atributos × classe:**  
-    - `Eficiencia x classe.png`  
-    - `Erro x classe.png`  
-    - `Erro x Tempo.png`  
-    - `Experiencia x classe.png`  
-    - `Navegacao x classe.png`  
-    - `Satisfacao x classe.png`  
-    - `Tempo x classe.png`  
-    - `Plot Matrix.png`  
-  - **Árvore de decisão:**  
-    - `Arvore.png`  
-  - **Sumários e matrizes de confusão dos classificadores:**  
-    - `Naive Bayes.jpg`  
-    - `ibk.jpg`  
-    - `j48.jpg`  
-    - `oner.jpg`  
-    - `zeror.jpg`  
-
----
