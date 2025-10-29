@@ -135,42 +135,42 @@ Abaixo, todos os prints da pasta `prints/`, com análise baseada no conteúdo vi
 - **Eficiencia x classe.png:** Scatter plot `eficiencia` (x: 0-1) vs `nivel_usabilidade` (y: baixa=blue, media=red, alta=green).  
   **Descrição detalhada:** Pontos azuis (baixa) <0.4; vermelhos (media) ~0.4-0.6; verdes (alta) >0.6. Separação nítida, jitter para evitar sobreposição.  
   **Análise:** Eficiência alta correlaciona perfeitamente com usabilidade alta, validando hipótese IHC de produtividade como chave.  
-  ![Eficiência x Classe](prints/Eficiencia x classe.png)
+  ![Eficiência x Classe](prints/Eficienciaxclasse.png)
 
 - **Erro x classe.png:** Scatter plot `erros` (x: 0-11) vs `nivel_usabilidade`.  
   **Descrição detalhada:** Azuis (baixa) >5 erros; vermelhos (media) 3-5; verdes (alta) <3. Correlação negativa clara.  
   **Análise:** Erros elevados indicam falhas de design (ex.: falta de feedback), reduzindo usabilidade. Threshold ~3 erros como ponto crítico.  
-  ![Erro x Classe](prints/Erro x classe.png)
+  ![Erro x Classe](prints/Erroxclasse.png)
 
 - **Erro x Tempo.png:** Scatter plot `tempo_tarefa_seg` (x: 60-516) vs `erros` (y: 0-11), colorido por classe.  
   **Descrição detalhada:** Correlação positiva: azuis (baixa) alto tempo/alto erros; verdes (alta) baixo. Clusters distinctos.  
   **Análise:** Erros prolongam tempo (recuperação cognitiva), reforçando necessidade de validação preventiva em IHC.  
-  ![Erro x Tempo](prints/Erro x Tempo.png)
+  ![Erro x Tempo](prints/ErroxTempo.png)
 
 - **Experiencia x classe.png:** Scatter plot `experiencia_previa` (x: baixa/media/alta) vs `nivel_usabilidade`.  
   **Descrição detalhada:** Baixa experiência: mostly azuis (baixa); media: vermelhos; alta: verdes (alta). Separação categórica forte.  
   **Análise:** Experiência modera usabilidade; designs devem adaptar-se a novatos (ex.: guias). Raiz da árvore J48.  
-  ![Experiencia x Classe](prints/Experiencia x classe.png)
+  ![Experiencia x Classe](prints/Experienciaxclasse.png)
 
 - **Navegacao x classe.png:** Scatter plot `navegacao_intuitiva` (x: 1-5) vs `nivel_usabilidade`.  
   **Descrição detalhada:** Azuis <2; vermelhos 2-4; verdes >4. Escala ordinal com separação linear.  
   **Análise:** Navegação intuitiva é chave para fluidez; baixa pontuação indica confusão hierárquica.  
-  ![Navegacao x Classe](prints/Navegacao x classe.png)
+  ![Navegacao x Classe](prints/Navegacaoxclasse.png)
 
 - **Plot Matrix.png:** Matriz de dispersão para todos atributos.  
   **Descrição detalhada:** Subplots pairwise: ex., tempo vs erros (positiva), eficiencia vs usabilidade (positiva). Cores por classe mostram clusters separados.  
   **Análise:** Confirma correlações globais; base bem separável, ideal para classificação. Sem multicolinearidade extrema.  
-  ![Plot Matrix](prints/Plot Matrix.png)
+  ![Plot Matrix](prints/PlotMatrix.png)
 
 - **Satisfacao x classe.png:** Scatter plot `satisfacao` (x: 1-5) vs `nivel_usabilidade`.  
   **Descrição detalhada:** Azuis <3; vermelhos 3; verdes >3. Separação nítida.  
   **Análise:** Satisfação subjetiva reflete experiência global; alta correlaciona com baixa frustrações.  
-  ![Satisfacao x Classe](prints/satisfacao x classe.png)
+  ![Satisfacao x Classe](prints/satisfacaoxclasse.png)
 
 - **Tempo x classe.png:** Scatter plot `tempo_tarefa_seg` (x: 60-516) vs `nivel_usabilidade`.  
   **Descrição detalhada:** Azuis >120s; vermelhos 60-120; verdes <60. Correlação negativa.  
   **Análise:** Tempos longos indicam ineficiência; otimize fluxos para <60s em tarefas chave.  
-  ![Tempo x Classe](prints/Tempo x classe.png)
+  ![Tempo x Classe](prints/Tempoxclasse.png)
 
 - **ibk.jpg:** Sumário IBk.  
   **Descrição detalhada:** Acurácia 88.3333%, Kappa 0.8242, matriz acima, ROC/PRC altas.  
@@ -185,7 +185,7 @@ Abaixo, todos os prints da pasta `prints/`, com análise baseada no conteúdo vi
 - **Naive Bayes.jpg:** Sumário Naive Bayes.  
   **Descrição detalhada:** Acurácia 87.3333%, Kappa 0.8103, matriz acima.  
   **Análise:** Eficiente para atributos mistos, mas subestima interações (assumindo independência).  
-  ![Naive Bayes](prints/Naive Bayes.jpg)
+  ![Naive Bayes](prints/NaiveBayes.jpg)
 
 - **oner.jpg:** Sumário OneR.  
   **Descrição detalhada:** Acurácia 84%, Kappa 0.76, matriz acima.  
