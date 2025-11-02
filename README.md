@@ -92,3 +92,66 @@ O **J48** apresentou melhor equilíbrio entre precisão e interpretabilidade, re
 #### 🧮 5.2 Matrizes de Confusão  
 
 **J48 (melhor modelo):**
+✅ Acurácia: **91.33% (274/300 acertos)**
+
+Outros resultados também confirmam bom desempenho dos modelos probabilísticos e baseados em vizinhança.
+
+---
+
+#### 🖼️ 5.3 Visualizações (Pasta `prints/`)  
+
+| Arquivo | Descrição |
+|:---------|:-----------|
+| **Arvore.png** | Árvore J48 com 17 nós, raiz em `experiencia_previa`. Mostra divisão clara por atributos de usabilidade. |
+| **Eficienciaxclasse.png** | Relação direta entre eficiência e usabilidade — alta eficiência → alta usabilidade. |
+| **Erroxclasse.png** | Mais de 5 erros = baixa usabilidade. |
+| **ErroxTempo.png** | Correlação positiva entre erros e tempo. |
+| **Experienciaxclasse.png** | Usuários com alta experiência percebem maior usabilidade. |
+| **Navegacaoxclasse.png** | Navegação intuitiva é determinante para percepção positiva. |
+| **PlotMatrix.png** | Visualização global das correlações — clusters bem definidos. |
+| **Satisfacaoxclasse.png** | Alta satisfação correlaciona com usabilidade alta. |
+| **Tempoxclasse.png** | Tarefas acima de 120s associam-se à baixa usabilidade. |
+| **j48.jpg** | Sumário do melhor modelo: 91.33% de acurácia, κ=0.8694. |
+| **ibk.jpg / naivebayes.jpg / oner.jpg / zeror.jpg** | Comparativos dos demais classificadores. |
+
+---
+
+### 6️⃣ Análise Crítica dos Resultados e Relação com IHC  
+
+Os resultados confirmam a hipótese principal:  
+> **Alta usabilidade ocorre quando há baixa carga cognitiva (erros/tempo) e alta satisfação do usuário.**
+
+- O **J48** "redescobre" os princípios da ISO 9241-11, mostrando a relevância de experiência e eficiência.  
+- A **base sintética** foi coerente, mas carece de variabilidade real (logs de usuários ou SUS seriam ideais).  
+- Técnicas ensemble (Random Forest, AdaBoost) poderiam melhorar robustez.  
+
+**Recomendações de IHC:**
+- Criar **onboarding guiado** para novatos.  
+- Melhorar **feedback imediato** para reduzir erros.  
+- Projetar **fluxos de interação curtos (<60s)** em tarefas críticas.  
+- Usar **heatmaps e testes A/B** para refinar navegação e satisfação.
+
+---
+
+## 🧩 Conclusão  
+
+O modelo **J48** apresentou o melhor desempenho (**91.33%**, κ=**0.8694**), confirmando os principais determinantes de **alta usabilidade**:  
+> Alta experiência + Eficiência ≥ 0.6 + Erros ≤ 2 + Tempo ≤ 60s + Satisfação ≥ 4.  
+
+Sites educacionais devem **priorizar simplicidade, feedback e adaptabilidade**, garantindo experiências positivas e acessíveis para todos os usuários.
+
+---
+
+## 📦 Materiais Entregues  
+
+- `usabilidade_site_educacional.arff`  
+- `relatorio.md`  
+- Pasta `prints/` (visualizações e matrizes)  
+
+---
+
+**Autor:** [Seu Nome Aqui]  
+**Disciplina:** Interação Humano-Computador (IHC)  
+**Instituição:** Universidade Federal do Amazonas — ICET/UFAM  
+**Ano:** 2025  
+
