@@ -147,7 +147,7 @@ Abaixo, todos os prints da pasta `prints/`, com análise baseada no conteúdo vi
 - **Experiencia x classe.png:** Scatter plot `experiencia_previa` (x: baixa/media/alta) vs `nivel_usabilidade`.  
   **Descrição detalhada:** Baixa experiência: mostly azuis (baixa); media: vermelhos; alta: verdes (alta). Separação categórica forte.  
   **Análise:** Experiência modera usabilidade; designs devem adaptar-se a novatos (ex.: guias). Raiz da árvore J48.  
-  ![Experiencia x Classe](Prints/Experienciaxclasse.png)
+  ![Experiencia x Classe](Prints/Expercienciaxclasse.png)
 
 - **Navegacao x classe.png:** Scatter plot `navegacao_intuitiva` (x: 1-5) vs `nivel_usabilidade`.  
   **Descrição detalhada:** Azuis <2; vermelhos 2-4; verdes >4. Escala ordinal com separação linear.  
