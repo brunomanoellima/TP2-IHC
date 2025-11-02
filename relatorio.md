@@ -182,17 +182,17 @@ Abaixo, todos os prints da pasta `prints/`, com análise baseada no conteúdo vi
 - **Naive Bayes.jpg:** Sumário Naive Bayes.  
   **Descrição detalhada:** Acurácia 87.3333%, Kappa 0.8103, matriz acima.  
   **Análise:** Eficiente para atributos mistos, mas subestima interações (assumindo independência).  
-  ![Naive Bayes](prints/NaiveBayes.jpg)
+  ![Naive Bayes](Prints/NaiveBayes.jpg)
 
 - **oner.jpg:** Sumário OneR.  
   **Descrição detalhada:** Acurácia 84%, Kappa 0.76, matriz acima.  
   **Análise:** Regra única (provavelmente em eficiencia/erros) captura 84%; simples mas efetiva.  
-  ![OneR](prints/oner.jpg)
+  ![OneR](Prints/oner.jpg)
 
 - **zeror.jpg:** Sumário ZeroR.  
   **Descrição detalhada:** Acurácia 36.6667%, Kappa 0, matriz acima.  
   **Análise:** Referência mínima; destaca melhoria dos outros modelos.  
-  ![ZeroR](prints/zeror.jpg)
+  ![ZeroR](Prints/zeror.jpg)
 
 ---
 
