@@ -148,10 +148,3 @@ Sites educacionais devem **priorizar simplicidade, feedback e adaptabilidade**, 
 - `relatorio.md`  
 - Pasta `prints/` (visualizações e matrizes)  
 
----
-
-**Autor:** [Seu Nome Aqui]  
-**Disciplina:** Interação Humano-Computador (IHC)  
-**Instituição:** Universidade Federal do Amazonas — ICET/UFAM  
-**Ano:** 2025  
-
