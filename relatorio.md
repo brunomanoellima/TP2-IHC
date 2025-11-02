@@ -127,57 +127,57 @@ Abaixo, todos os prints da pasta `prints/`, com análise baseada no conteúdo vi
 - **Arvore.png:** Visualização da árvore J48.  
   **Descrição detalhada:** Árvore com raiz em `experiencia_previa` (baixa, media, alta). Para `baixa`: divide por `navegacao_intuitiva` (<=3: baixa; >3: por `satisfacao`). Para `media`: divide por `satisfacao`, depois `erros`, `tempo_tarefa_seg`. Para `alta`: divide por `erros` (<=3: alta; >3: por `satisfacao`). Profundidade moderada (até 5 níveis), 17 nós.  
   **Análise:** Reproduz regras de geração (ex.: alta experiência + baixa erros = alta usabilidade). Interpretável para IHC: priorize onboarding para baixa experiência.  
-  ![Árvore J48](prints/Arvore.png)
+  ![Árvore J48](Prints/Arvore.png)
 
 - **Eficiencia x classe.png:** Scatter plot `eficiencia` (x: 0-1) vs `nivel_usabilidade` (y: baixa=blue, media=red, alta=green).  
   **Descrição detalhada:** Pontos azuis (baixa) <0.4; vermelhos (media) ~0.4-0.6; verdes (alta) >0.6. Separação nítida, jitter para evitar sobreposição.  
   **Análise:** Eficiência alta correlaciona perfeitamente com usabilidade alta, validando hipótese IHC de produtividade como chave.  
-  ![Eficiência x Classe](prints/Eficienciaxclasse.png)
+  ![Eficiência x Classe](Prints/Eficienciaxclasse.png)
 
 - **Erro x classe.png:** Scatter plot `erros` (x: 0-11) vs `nivel_usabilidade`.  
   **Descrição detalhada:** Azuis (baixa) >5 erros; vermelhos (media) 3-5; verdes (alta) <3. Correlação negativa clara.  
   **Análise:** Erros elevados indicam falhas de design (ex.: falta de feedback), reduzindo usabilidade. Threshold ~3 erros como ponto crítico.  
-  ![Erro x Classe](prints/Erroxclasse.png)
+  ![Erro x Classe](Prints/Erroxclasse.png)
 
 - **Erro x Tempo.png:** Scatter plot `tempo_tarefa_seg` (x: 60-516) vs `erros` (y: 0-11), colorido por classe.  
   **Descrição detalhada:** Correlação positiva: azuis (baixa) alto tempo/alto erros; verdes (alta) baixo. Clusters distinctos.  
   **Análise:** Erros prolongam tempo (recuperação cognitiva), reforçando necessidade de validação preventiva em IHC.  
-  ![Erro x Tempo](prints/ErroxTempo.png)
+  ![Erro x Tempo](Prints/ErroxTempo.png)
 
 - **Experiencia x classe.png:** Scatter plot `experiencia_previa` (x: baixa/media/alta) vs `nivel_usabilidade`.  
   **Descrição detalhada:** Baixa experiência: mostly azuis (baixa); media: vermelhos; alta: verdes (alta). Separação categórica forte.  
   **Análise:** Experiência modera usabilidade; designs devem adaptar-se a novatos (ex.: guias). Raiz da árvore J48.  
-  ![Experiencia x Classe](prints/Experienciaxclasse.png)
+  ![Experiencia x Classe](Prints/Experienciaxclasse.png)
 
 - **Navegacao x classe.png:** Scatter plot `navegacao_intuitiva` (x: 1-5) vs `nivel_usabilidade`.  
   **Descrição detalhada:** Azuis <2; vermelhos 2-4; verdes >4. Escala ordinal com separação linear.  
   **Análise:** Navegação intuitiva é chave para fluidez; baixa pontuação indica confusão hierárquica.  
-  ![Navegacao x Classe](prints/Navegacaoxclasse.png)
+  ![Navegacao x Classe](Prints/Navegacaoxclasse.png)
 
 - **Plot Matrix.png:** Matriz de dispersão para todos atributos.  
   **Descrição detalhada:** Subplots pairwise: ex., tempo vs erros (positiva), eficiencia vs usabilidade (positiva). Cores por classe mostram clusters separados.  
   **Análise:** Confirma correlações globais; base bem separável, ideal para classificação. Sem multicolinearidade extrema.  
-  ![Plot Matrix](prints/PlotMatrix.png)
+  ![Plot Matrix](Prints/PlotMatrix.png)
 
 - **satisfacao x classe.png:** Scatter plot `satisfacao` (x: 1-5) vs `nivel_usabilidade`.  
   **Descrição detalhada:** Azuis <3; vermelhos 3; verdes >3. Separação nítida.  
   **Análise:** Satisfação subjetiva reflete experiência global; alta correlaciona com baixa frustrações.  
-  ![Satisfacao x Classe](prints/satisfacaoxclasse.png)
+  ![Satisfacao x Classe](Prints/satisfacaoxclasse.png)
 
 - **Tempo x classe.png:** Scatter plot `tempo_tarefa_seg` (x: 60-516) vs `nivel_usabilidade`.  
   **Descrição detalhada:** Azuis >120s; vermelhos 60-120; verdes <60. Correlação negativa.  
   **Análise:** Tempos longos indicam ineficiência; otimize fluxos para <60s em tarefas chave.  
-  ![Tempo x Classe](prints/Tempoxclasse.png)
+  ![Tempo x Classe](Prints/Tempoxclasse.png)
 
 - **ibk.jpg:** Sumário IBk.  
   **Descrição detalhada:** Acurácia 88.3333%, Kappa 0.8242, matriz acima, ROC/PRC altas.  
   **Análise:** Bom, mas inferior a J48; sensível a outliers em dados sintéticos.  
-  ![IBk](prints/ibk.jpg)
+  ![IBk](Prints/ibk.jpg)
 
 - **j48.jpg:** Sumário J48.  
   **Descrição detalhada:** Acurácia 91.3333%, Kappa 0.8694, matriz acima, árvore com 17 nós.  
   **Análise:** Excelente generalização; regras extraídas diretamente aplicáveis em IHC.  
-  ![J48](prints/j48.jpg)
+  ![J48](Prints/j48.jpg)
 
 - **Naive Bayes.jpg:** Sumário Naive Bayes.  
   **Descrição detalhada:** Acurácia 87.3333%, Kappa 0.8103, matriz acima.  
