@@ -1,9 +1,6 @@
 # 🧠 Classificação da Usabilidade de um Site Educacional  
 **Trabalho Prático 2 — Interação Humano-Computador e Machine Learning (Weka)**  
 
----
-
-## 📘 Etapa 4 — Relatório Final  
 
 ---
 
